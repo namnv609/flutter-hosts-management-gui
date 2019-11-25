@@ -1,3 +1,4 @@
+import 'package:example_flutter/pages/forms/domain_form.dart';
 import 'package:example_flutter/pages/forms/ip_form.dart';
 import 'package:example_flutter/pages/home.dart';
 import 'package:example_flutter/pages/ip_detail.dart';
@@ -7,6 +8,7 @@ class AppRoutes {
   static var routes = <String, WidgetBuilder>{
     HomePage.routeName: (context) => HomePage(),
     IPDetail.routeName: (context) => IPDetail(),
-    IPForm.routeName: (context) => IPForm()
+    IPForm.routeName: (context) => IPForm(),
+    DomainForm.routeName: (context) => DomainForm(),
   };
 }

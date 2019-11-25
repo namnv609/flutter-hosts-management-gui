@@ -1,4 +1,5 @@
 import 'package:example_flutter/args/ip_details_args.dart';
+import 'package:example_flutter/pages/forms/domain_form.dart';
 import 'package:flutter/material.dart';
 
 class IPDetail extends StatelessWidget {
@@ -10,7 +11,7 @@ class IPDetail extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Domains of ${ipDetailArgs.ipAddr}'),
+        title: Text('Tên miền của ${ipDetailArgs.ipAddr}'),
       ),
       body: Container(
         child: ListView.builder(
@@ -30,11 +31,22 @@ class IPDetail extends StatelessWidget {
           },
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        tooltip: 'Thêm mới domain',
-        onPressed: () => print('Added'),
+      floatingActionButton: Builder(
+        builder: (context) {
+          return FloatingActionButton(
+            child: Icon(Icons.add),
+            tooltip: 'Thêm mới tên miền',
+            onPressed: () => _addNewDomainNameAddress(context)
+          );
+        }
       ),
     );
+  }
+
+  _addNewDomainNameAddress(BuildContext context) async {
+    final newDomainName = await Navigator.pushNamed(
+      context,
+      DomainForm.routeName
+    ) as String;
   }
 }

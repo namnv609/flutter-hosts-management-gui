@@ -66,7 +66,7 @@ class HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('IP addresses'),
+        title: Text('Danh sách IP'),
       ),
       body: Container(
         child: ListView.builder(
@@ -91,16 +91,32 @@ class HomePageState extends State<HomePage> {
           },
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        tooltip: 'Thêm mới IP',
-        onPressed: () {
-          Navigator.pushNamed(
-            context,
-            IPForm.routeName
+      floatingActionButton: Builder(
+        builder: (context) {
+          return FloatingActionButton(
+            child: Icon(Icons.add),
+            tooltip: 'Thêm mới IP',
+            onPressed: () => _addNewIPAddress(context),
           );
-        },
+        }
       ),
     );
+  }
+  _addNewIPAddress(BuildContext context) async {
+    final newIPAddr = await Navigator.pushNamed(
+      context,
+      IPForm.routeName
+    ) as String;
+
+    if (newIPAddr != null && newIPAddr.isNotEmpty) {
+      hostsIPs.add(newIPAddr);
+      setState(() {
+        hostsIPs = hostsIPs;
+      });
+
+      Scaffold.of(context)
+        ..removeCurrentSnackBar()
+        ..showSnackBar(SnackBar(content: Text('Thêm mới IP $newIPAddr thành công!')));
+    }
   }
 }
