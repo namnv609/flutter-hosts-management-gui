@@ -1,44 +1,69 @@
-import 'package:example_flutter/args/ip_details_args.dart';
+import 'package:example_flutter/models/ip_domain_model.dart';
 import 'package:example_flutter/pages/forms/domain_form.dart';
+import 'package:example_flutter/pages/home.dart';
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 class IPDetail extends StatelessWidget {
   static const routeName = '/ip_detail';
 
   @override
   Widget build(BuildContext context) {
-    IPDetailArgs ipDetailArgs = ModalRoute.of(context).settings.arguments;
+    Map<String, String> ipDetailArgs = ModalRoute.of(context).settings.arguments;
+    String ipAddr = ipDetailArgs['ip_addr'];
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Tên miền của ${ipDetailArgs.ipAddr}'),
-      ),
-      body: Container(
-        child: ListView.builder(
-          itemCount: ipDetailArgs.ipDomains?.length ?? 0,
-          itemBuilder: (BuildContext context, idx) {
-            return Card(
-              child: ListTile(
-                title: Text(ipDetailArgs.ipDomains[idx]),
-                trailing: IconButton(
-                  icon: Icon(Icons.delete),
-                  color: Colors.redAccent,
-                  tooltip: 'Xóa domain',
-                  onPressed: () => print('Deleted')
-                ),
+    return ScopedModel(
+      model: HomePage.ipDomainModel,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Danh sách domain của IP $ipAddr'),
+        ),
+        body: ScopedModelDescendant<IPDomainModel>(
+          builder: (context, child, model) {
+            List<String> domainsOfIP = model.domainsOfIP(ipAddr);
+
+            return Container(
+              child: ListView.builder(
+                itemCount: domainsOfIP?.length ?? 0,
+                itemBuilder: (context, idx) {
+                  String domainAddr = domainsOfIP[idx];
+
+                  return Card(
+                    child: ListTile(
+                      title: Text(domainAddr),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          IconButton(
+                            icon: Icon(Icons.edit),
+                            tooltip: 'Sửa domain',
+                            onPressed: () {},
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.delete),
+                            tooltip: 'Xóa domain',
+                            onPressed: () {},
+                          )
+                        ],
+                      ),
+                    ),
+                  );
+                },
               ),
             );
           },
         ),
-      ),
-      floatingActionButton: Builder(
-        builder: (context) {
-          return FloatingActionButton(
-            child: Icon(Icons.add),
-            tooltip: 'Thêm mới tên miền',
-            onPressed: () => _addNewDomainNameAddress(context)
-          );
-        }
+        floatingActionButton: Builder(
+          builder: (context) {
+            return FloatingActionButton(
+              child: IconButton(
+                icon: Icon(Icons.add),
+                tooltip: 'Thêm mới domain',
+                onPressed: () {},
+              )
+            );
+          },
+        ),
       ),
     );
   }
